@@ -1,6 +1,7 @@
 import random
 import pygame
 from settings import *
+from typing import Tuple
 
 class Cell:
 
@@ -18,28 +19,28 @@ class Cell:
         self.visited = False
         self.neighbors = list()
 
-    def is_visited(self):
+    def is_visited(self) -> bool:
         return self.visited
 
-    def visit(self):
+    def visit(self) -> None:
         self.visited = True
 
-    def get_row(self):
+    def get_row(self) -> int:
         return self.row
 
-    def get_col(self):
+    def get_col(self) -> int:
         return self.col
 
-    def get_dims(self):
+    def get_dims(self) -> Tuple[int]:
         return self.row, self.col
 
-    def add_neighbor(self, cell):
+    def add_neighbor(self, cell) -> None:
         self.neighbors.append(cell)
 
-    def get_neighbor_count(self):
+    def get_neighbor_count(self) -> int:
         return len(self.neighbors)
 
-    def get_neighbor(self):
+    def get_neighbor(self) -> Cell:
         cell = None
         random.shuffle(self.neighbors)
 
@@ -50,7 +51,7 @@ class Cell:
 
         return cell
 
-    def draw(self, win: pygame.Surface):
+    def draw(self, win: pygame.Surface) -> None:
         if self.is_visited():
             pygame.draw.rect(win, self.color, (self.x, self.y, self.size, self.size), 0)
 
@@ -66,11 +67,11 @@ class Cell:
         if self.wallFlags[self.wallDict.index("left")]:
             pygame.draw.line(win, self.wallColor, (self.x, self.y), (self.x, self.y + self.size), 2)
 
-    def remove_wall(self, wall):
+    def remove_wall(self, wall) -> None:
         if wall in self.wallDict:
             self.wallFlags[self.wallDict.index(wall)] = False
 
-    def highlight(self, win: pygame.Surface):
+    def highlight(self, win: pygame.Surface) -> None:
         pygame.draw.rect(win, self.highLightColor, (self.x, self.y, self.size, self.size))
         pygame.display.update()
     
