@@ -56,7 +56,7 @@ class Cell:
             pygame.draw.rect(win, self.color, (self.x, self.y, self.size, self.size), 0)
 
         if self.wallFlags[self.wallDict.index("top")]:
-            pygame.draw.line(win, self.wallColor, (self.x, self.y), (self.x, self.y + self.size), 2)
+            pygame.draw.line(win, self.wallColor, (self.x, self.y), (self.x + self.size, self.y), 2)
         
         if self.wallFlags[self.wallDict.index("right")]:
             pygame.draw.line(win, self.wallColor, (self.x + self.size, self.y), (self.x + self.size, self.y + self.size), 2)
