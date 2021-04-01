@@ -21,7 +21,11 @@ class Maze:
         self.clock = None
         self.win = None
         self.maze_win = None
+        self.currentCell = None
+        self.stack = list()
         self.offsets = ((0, -1), (1, 0), (0, 1), (-1, 0))
+
+        self.maze_init()
 
     def grid_init(self) -> None:
         self.maze = list()
@@ -31,6 +35,10 @@ class Maze:
                 self.maze[row].append(Cell(row, col, self.size))
 
         self.update_neighbors()
+        self.stack.clear()
+        row, col = random.randrange(self.rows), random.randrange(self.cols)
+        self.currentCell = self.maze[row][col]
+
 
     def is_valid_dims(self, row: int, col: int) -> bool:
         return row in range(self.rows) and col in range(self.cols)
@@ -82,8 +90,56 @@ class Maze:
 
         pygame.display.update()
 
+    def remove_wall(self, current, neighbor):
+        rowDiff = current.get_row() - neighbor.get_row()
+        colDiff = current.get_col() - neighbor.get_col()
+        
+        if rowDiff == 1:
+            current.remove_wall('top')
+            neighbor.remove_wall('bottom')
+        elif rowDiff == -1:
+            current.remove_wall('bottom')
+            neighbor.remove_wall('top')
+        elif colDiff == 1:
+            current.remove_wall('left')
+            neighbor.remove_wall('right')
+        elif colDiff == -1:
+            current.remove_wall('right')
+            neighbor.remove_wall('left')
+
+
+    def generate_maze(self):
+        run = True
+        
+        while run:
+            self.clock.tick(self.fps)
+            self.draw()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.quit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.run()
+
+            self.currentCell.visit()
+            self.currentCell.highlight(self.maze_win)
+
+            cell = self.currentCell.get_neighbor()
+
+            if cell is None:
+                if len(self.stack) != 0:
+                    self.currentCell = self.stack.pop()
+                else:
+                    run = False
+            else:
+                self.stack.append(self.currentCell)   
+                self.stack.append(cell)
+                self.remove_wall(self.currentCell, cell)
+                self.currentCell = cell
+
+
     def run(self):
-        self.maze_init()
 
         run = True
         while run:
@@ -93,6 +149,14 @@ class Maze:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.maze_win.fill(BLACK)
+                        self.grid_init()
+
+                    if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
+                        self.generate_maze()
 
         self.quit()
 
