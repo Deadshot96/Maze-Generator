@@ -10,3 +10,11 @@ class Cell:
         self.size = size
         self.x = self.col * self.size
         self.y = self.row * self.size
+        self.color = PURPLE
+        self.wallColor = WHITE
+        self.wallFlags = [True] * 4
+        self.wallDict = ["top", "right", "bottom", "left"]
+        self.visited = False
+        self.neighbors = list()
+
+        
