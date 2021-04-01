@@ -12,6 +12,7 @@ class Cell:
         self.y = self.row * self.size
         self.color = PURPLE
         self.wallColor = WHITE
+        self.highLightColor = BLUE
         self.wallFlags = [True] * 4
         self.wallDict = ["top", "right", "bottom", "left"]
         self.visited = False
@@ -50,4 +51,26 @@ class Cell:
         return cell
 
     def draw(self, win: pygame.Surface):
-        pass
+        if self.is_visited():
+            pygame.draw.rect(win, self.color, (self.x, self.y, self.size, self.size), 0)
+
+        if self.wallFlags[self.wallDict.index("top")]:
+            pygame.draw.line(win, self.wallColor, (self.x, self.y), (self.x, self.y + self.size), 2)
+        
+        if self.wallFlags[self.wallDict.index("right")]:
+            pygame.draw.line(win, self.wallColor, (self.x + self.size, self.y), (self.x + self.size, self.y + self.size), 2)
+        
+        if self.wallFlags[self.wallDict.index("bottom")]:
+            pygame.draw.line(win, self.wallColor, (self.x, self.y + self.size), (self.x + self.size, self.y + self.size), 2)
+
+        if self.wallFlags[self.wallDict.index("left")]:
+            pygame.draw.line(win, self.wallColor, (self.x, self.y), (self.x, self.y + self.size), 2)
+
+    def remove_wall(self, wall):
+        if wall in self.wallDict:
+            self.wallFlags[self.wallDict.index(wall)] = False
+
+    def highlight(self, win: pygame.Surface):
+        pygame.draw.rect(win, self.highLightColor, (self.x, self.y, self.size, self.size))
+        pygame.display.update()
+    
