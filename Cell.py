@@ -40,7 +40,7 @@ class Cell:
     def get_neighbor_count(self) -> int:
         return len(self.neighbors)
 
-    def get_neighbor(self) -> Cell:
+    def get_neighbor(self):
         cell = None
         random.shuffle(self.neighbors)
 
