@@ -5,6 +5,7 @@ MAZE_HEIGHT = 502
 XOFF = (WIDTH - MAZE_WIDTH) // 2
 YOFF = int((HEIGHT - MAZE_HEIGHT) * 0.8)
 SIZE = 25
+FPS = 60
 FONT = "comicsansms"
 FONT_SIZE = 40
 TITLE = "Maze Generator"
